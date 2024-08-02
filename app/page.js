@@ -1,9 +1,9 @@
 'use client';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { firestore } from '@/firebase';
 import { Box, Button, Modal, Stack, TextField, Typography, IconButton, InputBase, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { collection, doc, getDocs, query, setDoc, deleteDoc, getDoc, writeBatch } from 'firebase/firestore';
+import { Camera } from 'react-camera-pro';
 import MenuIcon from '@mui/icons-material/Menu';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -30,6 +30,7 @@ export default function Home() {
   const [newItemName, setNewItemName] = useState('');
   const [newItemCategory, setNewItemCategory] = useState('');
   const [newItemQuantity, setNewItemQuantity] = useState(1);
+  const [cameraOpen, setCameraOpen] = useState(false);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'inventory'));
@@ -92,11 +93,21 @@ export default function Home() {
 
   const addOrUpdateItem = async (item) => {
     const docRef = doc(collection(firestore, 'inventory'), item.name);
-    await setDoc(docRef, { 
-      category: item.category || '', 
-      quantity: item.quantity || 1 
-    }, { merge: true });
-    await updateInventory();
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      // Item already exists, show error
+      alert(`An item with the name "${item.name}" already exists. Please use a different name.`);
+      return false;
+    } else {
+      // Item doesn't exist, add it
+      await setDoc(docRef, { 
+        category: item.category || '', 
+        quantity: item.quantity || 1 
+      });
+      await updateInventory();
+      return true;
+    }
   };
 
   const addCategory = async (category) => {
@@ -171,7 +182,7 @@ export default function Home() {
     setNewItemQuantity(1);
     setOpen(true);
   };
-  
+
   const handleClose = () => setOpen(false);
   const handleCategoryClose = () => setCategoryOpen(false);
   const totalItems = inventory.length;
@@ -201,13 +212,20 @@ export default function Home() {
         transition="width 0.3s"
       >
         <Box>
-          <Button
-            startIcon={<MenuIcon />}
-            onClick={toggleSidebar}
-            sx={{ justifyContent: 'flex-start', width: '100%' }}
-          >
-            {sidebarOpen && 'Menu'}
-          </Button>
+        <Button
+          startIcon={<MenuIcon />}
+          onClick={toggleSidebar}
+          sx={{
+            justifyContent: 'flex-start',
+            width: '100%',
+            minWidth: sidebarOpen ? 'auto' : '60px',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            },
+          }}
+        >
+          {sidebarOpen && 'Menu'}
+        </Button>
           {sidebarOpen && (
             <>
               <Button
@@ -241,7 +259,12 @@ export default function Home() {
           )}
         </Box>
         <Box textAlign="center" p={1}>
+        <Button
+          onClick={() => setCameraOpen(true)}
+          sx={{ width: '100%', justifyContent: 'center' }}
+        >
           <CameraAltIcon />
+        </Button>
         </Box>
       </Box>
 
@@ -459,16 +482,18 @@ export default function Home() {
           </FormControl>
           <Button
             variant="outlined"
-            onClick={() => {
-              addOrUpdateItem({
+            onClick={async () => {
+              const success = await addOrUpdateItem({
                 name: newItemName,
                 category: newItemCategory,
                 quantity: newItemQuantity,
               });
-              setNewItemName('');
-              setNewItemCategory('');
-              setNewItemQuantity(1);
-              handleClose();
+              if (success) {
+                setNewItemName('');
+                setNewItemCategory('');
+                setNewItemQuantity(1);
+                handleClose();
+              }
             }}
           >
             Add
@@ -638,6 +663,47 @@ export default function Home() {
             }}
           >
             Add
+          </Button>
+        </Box>
+      </Modal>
+
+      {/* Camera Modal */}
+      <Modal open={cameraOpen} onClose={() => setCameraOpen(false)}>
+        <Box
+          position="absolute"
+          top="50%"
+          left="50%"
+          width="80%"
+          height="80%"
+          bgcolor="white"
+          border="2px solid #000"
+          boxShadow={24}
+          p={4}
+          sx={{
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <Camera
+            aspectRatio={16 / 9}
+            numberOfCamerasCallback={(i) => console.log(i)}
+            errorMessages={{
+              noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
+              permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+              switchCamera:
+                'It is not possible to switch camera to different one because there is only one video device accessible.',
+              canvas: 'Canvas is not supported.',
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={() => {
+              // Here you'll add the logic to capture and process the image
+              console.log('Picture taken');
+              setCameraOpen(false);
+            }}
+            sx={{ mt: 2 }}
+          >
+            Take Picture
           </Button>
         </Box>
       </Modal>
