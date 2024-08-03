@@ -211,7 +211,11 @@ export default function Home() {
         boxShadow="2px 0 5px rgba(0,0,0,0.1)"
         transition="width 0.3s"
         sx={{
-          position: 'relative',
+          position: 'fixed',  // Make the sidebar fixed
+          top: 0,
+          left: 0,           // Align the sidebar to the left
+          height: '100vh',   // Full height of the viewport
+          zIndex: 1000,      // Ensure the sidebar is above other content
         }}
       >
         <Box>
@@ -271,14 +275,14 @@ export default function Home() {
           alignItems="center"
           justifyContent="center"
           p={1}
-          sx={{ height: sidebarOpen ? 'auto' : '60px' }} // Ensure button is centered
+          sx={{ height: sidebarOpen ? 'auto' : '60px' }}
         >
           <Button
             onClick={() => setCameraOpen(true)}
             sx={{
               width: '100%',
               justifyContent: 'center',
-              minWidth: 'auto', // Adjust width if needed
+              minWidth: 'auto',
             }}
           >
             <CameraAltIcon />
@@ -287,7 +291,7 @@ export default function Home() {
       </Box>
 
       {/* Main Content */}
-      <Box flex={1} p={4}>
+      <Box flex={1} p={4} ml={sidebarOpen ? 32 : 8}>
         <Stack direction="row" spacing={2} mb={4}>
           <Box
             flex={1}
