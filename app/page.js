@@ -210,22 +210,30 @@ export default function Home() {
         justifyContent="space-between"
         boxShadow="2px 0 5px rgba(0,0,0,0.1)"
         transition="width 0.3s"
+        sx={{
+          position: 'relative',
+        }}
       >
         <Box>
-        <Button
-          startIcon={<MenuIcon />}
-          onClick={toggleSidebar}
-          sx={{
-            justifyContent: 'flex-start',
-            width: '100%',
-            minWidth: sidebarOpen ? 'auto' : '60px',
-            '&:hover': {
-              backgroundColor: 'rgba(0, 0, 0, 0.04)',
-            },
-          }}
-        >
-          {sidebarOpen && 'Menu'}
-        </Button>
+          <Button
+            startIcon={<MenuIcon />}
+            onClick={toggleSidebar}
+            sx={{
+              justifyContent: sidebarOpen ? 'flex-start' : 'center',
+              width: '100%',
+              minWidth: sidebarOpen ? 'auto' : '60px',
+              textAlign: sidebarOpen ? 'left' : 'center',
+              padding: '8px',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              position: 'relative',
+              left: sidebarOpen ? '0' : '50%',
+              transform: sidebarOpen ? 'none' : 'translateX(-50%)',
+            }}
+          >
+            {sidebarOpen && 'Menu'}
+          </Button>
           {sidebarOpen && (
             <>
               <Button
@@ -258,13 +266,23 @@ export default function Home() {
             </>
           )}
         </Box>
-        <Box textAlign="center" p={1}>
-        <Button
-          onClick={() => setCameraOpen(true)}
-          sx={{ width: '100%', justifyContent: 'center' }}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          p={1}
+          sx={{ height: sidebarOpen ? 'auto' : '60px' }} // Ensure button is centered
         >
-          <CameraAltIcon />
-        </Button>
+          <Button
+            onClick={() => setCameraOpen(true)}
+            sx={{
+              width: '100%',
+              justifyContent: 'center',
+              minWidth: 'auto', // Adjust width if needed
+            }}
+          >
+            <CameraAltIcon />
+          </Button>
         </Box>
       </Box>
 
@@ -336,13 +354,26 @@ export default function Home() {
               onChange={(e) => setSelectedCategory(e.target.value)}
               label="Filter by Category"
             >
-              <MenuItem value="">All Categories</MenuItem>
-              <MenuItem value="none">No Category</MenuItem>
-              {categories.map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
+              {/* All Categories */}
+              <MenuItem value="">
+                All Categories ({inventory.length})
+              </MenuItem>
+              
+              {/* No Category */}
+              <MenuItem value="none">
+                No Category ({inventory.filter(item => !item.category || item.category === 'none').length})
+              </MenuItem>
+
+              {/* Specific Categories */}
+              {categories.map((category) => {
+                // Count items in the current category
+                const count = inventory.filter(item => item.category === category).length;
+                return (
+                  <MenuItem key={category} value={category}>
+                    {category} ({count})
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Box>
