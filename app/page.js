@@ -96,11 +96,9 @@ export default function Home() {
     const docSnap = await getDoc(docRef);
   
     if (docSnap.exists()) {
-      // Item already exists, show error
       alert(`An item with the name "${item.name}" already exists. Please use a different name.`);
       return false;
     } else {
-      // Item doesn't exist, add it
       await setDoc(docRef, { 
         category: item.category || '', 
         quantity: item.quantity || 1 
