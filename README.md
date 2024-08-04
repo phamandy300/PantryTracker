@@ -17,7 +17,7 @@ Visit it [here](https://inventory-manager-pearl.vercel.app/)
 - **Search & Filter:** Easily find items with integrated search and filter functionality.
 - **Responsive Design:** Presentable front end to display all pantry items.
 - **Deployment:** Deployed to Vercel with CI/CD for continuous integration and delivery.
-- **Image Recognition:** Implemented TensorFlow.js port of the COCO-SSD model for image recognition, though it currently does not work on the deployed Vercel website.
+- **Image Recognition:** Implemented TensorFlow.js port of the COCO-SSD model for image recognition.
 
 ## Demo
 
