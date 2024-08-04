@@ -6,6 +6,8 @@ Here’s the updated README with your dependencies:
 
 A modern inventory management application built with Next.js and Material UI. This project includes a Firebase backend for data storage, a responsive frontend design, and advanced features like image recognition using TensorFlow.js.
 
+Visit it [here](https://inventory-manager-pearl.vercel.app/)
+
 ## Features
 
 - **Next.js Setup:** Utilizes Next.js for server-side rendering and static site generation.
