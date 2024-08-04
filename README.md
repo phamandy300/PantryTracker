@@ -17,6 +17,10 @@ A modern inventory management application built with Next.js and Material UI. Th
 - **Deployment:** Deployed to Vercel with CI/CD for continuous integration and delivery.
 - **Image Recognition:** Implemented TensorFlow.js port of the COCO-SSD model for image recognition, though it currently does not work on the deployed Vercel website.
 
+## Demo
+
+[![Inventory Management Application Demo](https://img.youtube.com/vi/5nyNqznCgmU/0.jpg)](https://youtu.be/5nyNqznCgmU "Chatbot Demo")
+
 ## Getting Started
 
 ### Prerequisites
@@ -40,20 +44,20 @@ A modern inventory management application built with Next.js and Material UI. Th
    npm install
    ```
 
-This project uses the following dependencies:
-
-- `@emotion/react`: ^11.13.0
-- `@emotion/styled`: ^11.13.0
-- `@mui/icons-material`: ^5.16.6
-- `@mui/material`: ^5.16.6
-- `@tensorflow-models/coco-ssd`: ^2.2.3
-- `@tensorflow/tfjs`: ^4.20.0
-- `dotenv`: ^16.4.5
-- `firebase`: ^10.12.5
-- `next`: 14.2.5
-- `react`: ^18
-- `react-camera-pro`: ^1.4.0
-- `react-dom`: ^18
+   This project uses the following dependencies:
+   
+   - `@emotion/react`: ^11.13.0
+   - `@emotion/styled`: ^11.13.0
+   - `@mui/icons-material`: ^5.16.6
+   - `@mui/material`: ^5.16.6
+   - `@tensorflow-models/coco-ssd`: ^2.2.3
+   - `@tensorflow/tfjs`: ^4.20.0
+   - `dotenv`: ^16.4.5
+   - `firebase`: ^10.12.5
+   - `next`: 14.2.5
+   - `react`: ^18
+   - `react-camera-pro`: ^1.4.0
+   - `react-dom`: ^18
 
 3. Set up Firebase:
 
