@@ -63,7 +63,7 @@ export default function Home() {
         setNewItemQuantity(1);
         setAiItemOpen(true);
       });
-
+  
       setDetectedObjects([]);
     }
   }, [detectedObjects]);
@@ -747,19 +747,15 @@ export default function Home() {
         {/* Camera Modal */}
         <Modal open={cameraOpen} onClose={() => setCameraOpen(false)}>
           <Box
-            position="absolute"
-            top="50%"
-            left="50%"
-            width="90%"
-            height="90%"
-            bgcolor="white"
-            border="2px solid #000"
-            boxShadow={24}
             sx={{
-              transform: 'translate(-50%, -50%)',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              bgcolor: 'white',
               display: 'flex',
               flexDirection: 'column',
-              overflow: 'hidden',
             }}
           >
             <Box flexGrow={1} position="relative" overflow="hidden">
@@ -782,22 +778,22 @@ export default function Home() {
               />
             </Box>
             <Box p={2} display="flex" justifyContent="space-between">
-              <Button
-                variant="contained"
-                onClick={async () => {
-                  if (camera.current) {
-                    const imageSrc = camera.current.takePhoto();
-                    const img = new Image();
-                    img.src = imageSrc;
-                    img.onload = () => {
-                      detectObjects(img);
-                    };
-                    setCameraOpen(false);
-                  }
-                }}
-              >
-                Take Picture
-              </Button>
+            <Button
+              variant="contained"
+              onClick={async () => {
+                if (camera.current) {
+                  const imageSrc = camera.current.takePhoto();
+                  const img = new Image();
+                  img.src = imageSrc;
+                  img.onload = () => {
+                    detectObjects(img);
+                  };
+                  setCameraOpen(false);
+                }
+              }}
+            >
+              Take Picture
+            </Button>
               <Button
                 onClick={switchCamera}
                 disabled={numberOfCameras <= 1}
