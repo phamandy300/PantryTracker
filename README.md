@@ -78,10 +78,6 @@ A modern inventory management application built with Next.js and Material UI. Th
 
 Feel free to submit pull requests, report issues, or suggest improvements. Contributions are welcome!
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgements
 
 - [Next.js](https://nextjs.org/)
