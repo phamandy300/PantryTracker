@@ -21,7 +21,7 @@ Visit it [here](https://inventory-manager-pearl.vercel.app/)
 
 ## Demo
 
-[![Inventory Management Application Demo](https://img.youtube.com/vi/5nyNqznCgmU/0.jpg)](https://youtu.be/5nyNqznCgmU "Chatbot Demo")
+[![Inventory Management Application Demo](https://img.youtube.com/vi/6DMt9kb8yEY/1.jpg)](https://youtu.be/6DMt9kb8yEY)
 
 ## Getting Started
 
