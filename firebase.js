@@ -1,16 +1,15 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore'
-import { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId } from "./firebase_config.mjs"
 
 const firebaseConfig = {
-    apiKey: apiKey,
-    authDomain: authDomain,
-    projectId: projectId,
-    storageBucket: storageBucket,
-    messagingSenderId: messagingSenderId,
-    appId: appId,
-    measurementId: measurementId
-  };
+  apiKey: "AIzaSyBoBm8q232wy3wsY2hjGxzDwM6X38QSI5o",
+  authDomain: "pantry-tracker-eadad.firebaseapp.com",
+  projectId: "pantry-tracker-eadad",
+  storageBucket: "pantry-tracker-eadad.appspot.com",
+  messagingSenderId: "17059730680",
+  appId: "1:17059730680:web:ce5b7840f9eea9c4d9970d",
+  measurementId: "G-SV7YHVTK18"
+};
 
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
