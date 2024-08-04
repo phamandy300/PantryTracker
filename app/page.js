@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useRef,useState, useEffect } from 'react';
 import { firestore } from '@/firebase';
 import { Box, Button, Modal, Stack, TextField, Typography, IconButton, InputBase, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { collection, doc, getDocs, query, setDoc, deleteDoc, getDoc, writeBatch } from 'firebase/firestore';
@@ -8,7 +8,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
 import EditIcon from '@mui/icons-material/Edit';
+import * as cocossd from '@tensorflow-models/coco-ssd';
 
 export default function Home() {
   const [inventory, setInventory] = useState([]);
@@ -31,6 +33,36 @@ export default function Home() {
   const [newItemCategory, setNewItemCategory] = useState('');
   const [newItemQuantity, setNewItemQuantity] = useState(1);
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [detectedObjects, setDetectedObjects] = useState([]);
+  const [aiItemOpen, setAiItemOpen] = useState(false);
+  const [aiItemName, setAiItemName] = useState('');
+  const camera = useRef(null);
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+  const detectObjects = async (imageElement) => {
+    const model = await cocossd.load();
+    const predictions = await model.detect(imageElement);
+    setDetectedObjects(predictions);
+  };
+
+  useEffect(() => {
+    if (detectedObjects.length > 0) {
+      const objectNames = detectedObjects.map(obj => obj.class);
+      const uniqueObjects = [...new Set(objectNames)];
+      
+      uniqueObjects.forEach((objectName) => {
+        setAiItemName(capitalizeFirstLetter(objectName));
+        setNewItemCategory('');
+        setNewItemQuantity(1);
+        setAiItemOpen(true);
+      });
+
+      setDetectedObjects([]);
+    }
+  }, [detectedObjects]);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'inventory'));
@@ -209,11 +241,11 @@ export default function Home() {
         boxShadow="2px 0 5px rgba(0,0,0,0.1)"
         transition="width 0.3s"
         sx={{
-          position: 'fixed',  // Make the sidebar fixed
+          position: 'fixed',
           top: 0,
-          left: 0,           // Align the sidebar to the left
-          height: '100vh',   // Full height of the viewport
-          zIndex: 1000,      // Ensure the sidebar is above other content
+          left: 0,
+          height: '100vh',
+          zIndex: 1000,
         }}
       >
         <Box>
@@ -368,7 +400,6 @@ export default function Home() {
 
               {/* Specific Categories */}
               {categories.map((category) => {
-                // Count items in the current category
                 const count = inventory.filter(item => item.category === category).length;
                 return (
                   <MenuItem key={category} value={category}>
@@ -706,37 +737,146 @@ export default function Home() {
           position="absolute"
           top="50%"
           left="50%"
-          width="80%"
-          height="80%"
+          width="90%"
+          height="90%"
+          bgcolor="white"
+          border="2px solid #000"
+          boxShadow={24}
+          sx={{
+            transform: 'translate(-50%, -50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
+        >
+          <Box flexGrow={1} position="relative" overflow="hidden">
+            <Camera
+              ref={camera}
+              aspectRatio={16 / 9}
+              numberOfCamerasCallback={(i) => console.log(i)}
+              errorMessages={{
+                noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
+                permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+                switchCamera:
+                  'It is not possible to switch camera to different one because there is only one video device accessible.',
+                canvas: 'Canvas is not supported.',
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          </Box>
+          <Box p={2}>
+            <Button
+              variant="contained"
+              onClick={async () => {
+                if (camera.current) {
+                  const imageSrc = camera.current.takePhoto();
+                  const img = new Image();
+                  img.src = imageSrc;
+                  img.onload = () => {
+                    detectObjects(img);
+                  };
+                  setCameraOpen(false);
+                }
+              }}
+            >
+              Take Picture
+            </Button>
+            <Button
+              // hidden={numberOfCameras <= 1}
+              onClick={() => {
+                camera.current.switchCamera();
+              }}>
+                <CameraswitchIcon/>
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
+      {/* AI Detected Item Modal */}
+      <Modal open={aiItemOpen} onClose={() => {
+        setAiItemOpen(false);
+        setAiItemName('');
+        setNewItemCategory('');
+        setNewItemQuantity(1);
+      }}>
+        <Box
+          position="absolute"
+          top="50%"
+          left="50%"
+          width={400}
           bgcolor="white"
           border="2px solid #000"
           boxShadow={24}
           p={4}
+          display="flex"
+          flexDirection="column"
+          gap={3}
           sx={{
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <Camera
-            aspectRatio={16 / 9}
-            numberOfCamerasCallback={(i) => console.log(i)}
-            errorMessages={{
-              noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
-              permissionDenied: 'Permission denied. Please refresh and give camera permission.',
-              switchCamera:
-                'It is not possible to switch camera to different one because there is only one video device accessible.',
-              canvas: 'Canvas is not supported.',
-            }}
+          <Typography variant="h6">Add Detected Item</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Item Name"
+            value={aiItemName}
+            onChange={(e) => setAiItemName(capitalizeFirstLetter(e.target.value))}
           />
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Quantity"
+            type="number"
+            value={newItemQuantity}
+            onChange={(e) => setNewItemQuantity(parseInt(e.target.value, 10))}
+          />
+          <FormControl fullWidth>
+            <InputLabel id="ai-add-category-select-label">Category</InputLabel>
+            <Select
+              labelId="ai-add-category-select-label"
+              value={newItemCategory}
+              onChange={(e) => {
+                if (e.target.value === 'new') {
+                  setAddCategoryOpen(true);
+                } else {
+                  setNewItemCategory(e.target.value);
+                }
+              }}
+              label="Category"
+            >
+              <MenuItem value="">None</MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+              <MenuItem value="new">
+                <em>Add New Category</em>
+              </MenuItem>
+            </Select>
+          </FormControl>
           <Button
-            variant="contained"
-            onClick={() => {
-              // Here you'll add the logic to capture and process the image
-              console.log('Picture taken');
-              setCameraOpen(false);
+            variant="outlined"
+            onClick={async () => {
+              const success = await addOrUpdateItem({
+                name: capitalizeFirstLetter(aiItemName),
+                category: newItemCategory,
+                quantity: newItemQuantity,
+              });
+              if (success) {
+                setAiItemName('');
+                setNewItemCategory('');
+                setNewItemQuantity(1);
+                setAiItemOpen(false);
+              }
             }}
-            sx={{ mt: 2 }}
           >
-            Take Picture
+            Add
           </Button>
         </Box>
       </Modal>
