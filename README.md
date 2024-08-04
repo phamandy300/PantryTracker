@@ -62,15 +62,26 @@ A modern inventory management application built with Next.js and Material UI. Th
 3. Set up Firebase:
 
    - Create a Firebase project and obtain your configuration details.
-   - Add your Firebase config to `.env.local`:
+   - Paste your details into firebase.js
 
-     ```env
-     NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
-     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
-     NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
-     NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
-     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
-     NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+     ```firebase.js
+      import { initializeApp } from "firebase/app";
+      import { getFirestore } from 'firebase/firestore'
+      
+      const firebaseConfig = {
+        apiKey: your-apiKey,
+        authDomain: your-authDomain,
+        projectId: your-projectId,
+        storageBucket: your-storageBucket,
+        messagingSenderId: your-messagingSenderId,
+        appId: your-appId,
+        measurementId: your-measurementId
+      };
+      
+      const app = initializeApp(firebaseConfig);
+      const firestore = getFirestore(app);
+      
+      export {firestore}
      ```
 
 4. Run the development server:
