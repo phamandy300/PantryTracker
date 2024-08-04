@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
 import EditIcon from '@mui/icons-material/Edit';
+import * as tf from '@tensorflow/tfjs';
 import * as cocossd from '@tensorflow-models/coco-ssd';
 
 export default function Home() {
