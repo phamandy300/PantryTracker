@@ -1,10 +1,10 @@
-Sure! Here’s a README template based on the tasks you’ve completed:
+Here’s the updated README with your dependencies:
 
 ---
 
 # Inventory Management Website
 
-A modern inventory management application built with Next.js and Material UI. This project includes a Firebase backend for data storage, a responsive frontend design, and advanced features like image classification using the GPT Vision API.
+A modern inventory management application built with Next.js and Material UI. This project includes a Firebase backend for data storage, a responsive frontend design, and advanced features like image recognition using TensorFlow.js.
 
 ## Features
 
@@ -13,10 +13,9 @@ A modern inventory management application built with Next.js and Material UI. Th
 - **Firebase Backend:** Stores and manages inventory data with Firebase.
 - **CRUD Operations:** Form to add, delete, and update pantry items.
 - **Search & Filter:** Easily find items with integrated search and filter functionality.
-- **Responsive Design:** Presentable frontend to display all pantry items.
+- **Responsive Design:** Presentable front end to display all pantry items.
 - **Deployment:** Deployed to Vercel with CI/CD for continuous integration and delivery.
-- **Image Upload:** Capture and upload images using mobile or browser camera.
-- **Image Classification (Bonus):** Classify images using the GPT Vision API or other LLMs and update Firebase accordingly.
+- **Image Recognition:** Implemented TensorFlow.js port of the COCO-SSD model for image recognition, though it currently does not work on the deployed Vercel website.
 
 ## Getting Started
 
@@ -31,8 +30,8 @@ A modern inventory management application built with Next.js and Material UI. Th
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/inventory-management-website.git
-   cd inventory-management-website
+   git clone https://github.com/phamandy300/inventory-manager.git
+   cd inventory-manager
    ```
 
 2. Install dependencies:
@@ -40,6 +39,21 @@ A modern inventory management application built with Next.js and Material UI. Th
    ```bash
    npm install
    ```
+
+This project uses the following dependencies:
+
+- `@emotion/react`: ^11.13.0
+- `@emotion/styled`: ^11.13.0
+- `@mui/icons-material`: ^5.16.6
+- `@mui/material`: ^5.16.6
+- `@tensorflow-models/coco-ssd`: ^2.2.3
+- `@tensorflow/tfjs`: ^4.20.0
+- `dotenv`: ^16.4.5
+- `firebase`: ^10.12.5
+- `next`: 14.2.5
+- `react`: ^18
+- `react-camera-pro`: ^1.4.0
+- `react-dom`: ^18
 
 3. Set up Firebase:
 
@@ -69,11 +83,6 @@ A modern inventory management application built with Next.js and Material UI. Th
 2. Connect your GitHub repository to Vercel.
 3. Vercel will handle the deployment automatically with CI/CD.
 
-### Bonus Features
-
-- **Image Upload:** Use the provided interface to take and upload images.
-- **Image Classification:** Ensure that your API keys and endpoints for GPT Vision or other LLMs are configured in `.env.local` to use image classification features.
-
 ## Contributing
 
 Feel free to submit pull requests, report issues, or suggest improvements. Contributions are welcome!
@@ -84,8 +93,7 @@ Feel free to submit pull requests, report issues, or suggest improvements. Contr
 - [Material UI](https://mui.com/)
 - [Firebase](https://firebase.google.com/)
 - [Vercel](https://vercel.com/)
-- [GPT Vision API](https://openai.com/)
+- [TensorFlow.js](https://www.tensorflow.org/js)
+- [COCO-SSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd)
 
 ---
-
-Feel free to adjust any details to better fit your project specifics!
