@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore'
-import { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId } from "./firebase_config.mjs"
+// import { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId } from "./firebase_config.mjs"
 
 const firebaseConfig = {
     apiKey: apiKey,
