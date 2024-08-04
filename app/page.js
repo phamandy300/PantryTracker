@@ -125,19 +125,13 @@ export default function Home() {
 
   const addOrUpdateItem = async (item) => {
     const docRef = doc(collection(firestore, 'inventory'), item.name);
-    const docSnap = await getDoc(docRef);
   
-    if (docSnap.exists()) {
-      alert(`An item with the name "${item.name}" already exists. Please use a different name.`);
-      return false;
-    } else {
-      await setDoc(docRef, { 
-        category: item.category || '', 
-        quantity: item.quantity || 1 
-      });
-      await updateInventory();
-      return true;
-    }
+    await setDoc(docRef, { 
+      category: item.category || '', 
+      quantity: item.quantity || 1 
+    });
+    await updateInventory();
+    return true;
   };
 
   const addCategory = async (category) => {
