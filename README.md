@@ -1,7 +1,3 @@
-Here’s the updated README with your dependencies:
-
----
-
 # Inventory Management Website
 
 A modern inventory management application built with Next.js and Material UI. This project includes a Firebase backend for data storage, a responsive frontend design, and advanced features like image recognition using TensorFlow.js.
@@ -112,5 +108,3 @@ Feel free to submit pull requests, report issues, or suggest improvements. Contr
 - [Vercel](https://vercel.com/)
 - [TensorFlow.js](https://www.tensorflow.org/js)
 - [COCO-SSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd)
-
----
